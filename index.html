@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Avaliação corporal</title>
+
+  <!-- Todo o visual (cores, tamanhos, animações) fica neste arquivo -->
+  <link rel="stylesheet" href="estilo.css">
+</head>
+<body>
+<div class="pagina">
+
+  <!-- ================================================================
+       TOPO: logo + barra de progresso. Aparece em TODAS as telas.
+       A logo é montada pelo script.js (veja CONFIG lá no começo).
+       ================================================================ -->
+  <header class="topo">
+    <div class="logo" id="logo"></div>
+
+    <!-- Uma bolinha (passo) para cada tela. O script.js pinta as já feitas. -->
+    <div class="barra-progresso" id="barra-progresso" aria-hidden="true">
+      <i class="passo"></i><i class="passo"></i><i class="passo"></i><i class="passo"></i>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ================================================================
+         TELA 1: OBJETIVO
+         O cliente escolhe o que quer alcançar. As opções são criadas
+         pelo script.js a partir da lista OBJETIVOS (para criar um novo
+         objetivo, mexa só lá).
+         ================================================================ -->
+    <section class="tela" id="tela-objetivo">
+      <h1><br>Qual é o seu objetivo?</h1>
+      <p class="subtitulo">Me conta o que você sonha alcançar. Eu cuido do resto junto com você!</p>
+
+      <!-- Aqui entram as opções (Emagrecer, Ganhar massa, etc.) -->
+      <div class="lista-objetivos" id="lista-objetivos" role="radiogroup" aria-label="Objetivo"></div>
+
+      <!-- Campo que só aparece quando o cliente escolhe "Outro" -->
+      <div class="caixa-outro escondido" id="caixa-outro">
+        <label for="campo-outro">Qual é o seu objetivo?</label>
+        <textarea id="campo-outro" rows="3" maxlength="300"
+          placeholder="Ex.: melhorar a postura, correr 5 km, ficar mais disposto..."></textarea>
+      </div>
+
+      <p class="mensagem-erro" id="erro-objetivo" role="alert"></p>
+      <button class="botao" id="botao-continuar-objetivo">Vamos lá! 🚀</button>
+    </section>
+
+
+    <!-- ================================================================
+         TELA 2: DADOS PESSOAIS
+         Nome, idade e sexo do cliente.
+         ================================================================ -->
+    <section class="tela escondido" id="tela-dados">
+      <h1>Prazer, Me fale sobre você!😊</h1>
+
+      <label for="campo-nome">Como posso te chamar?</label>
+      <input type="text" id="campo-nome" autocomplete="name" placeholder="Seu nome">
+
+      <label for="campo-idade">Idade</label>
+      <input type="number" id="campo-idade" min="1" max="120" inputmode="numeric" placeholder="Anos">
+
+      <div class="rotulo" id="rotulo-sexo">Sexo</div>
+      <div class="lista-sexo" role="radiogroup" aria-labelledby="rotulo-sexo">
+        <label class="cartao-opcao">
+          <input type="radio" name="sexo" value="Feminino"><span>Feminino</span>
+        </label>
+        <label class="cartao-opcao">
+          <input type="radio" name="sexo" value="Masculino"><span>Masculino</span>
+        </label>
+      </div>
+
+      <p class="mensagem-erro" id="erro-dados" role="alert"></p>
+      <button class="botao" id="botao-continuar-dados">Próximo passo 👉</button>
+      <button class="botao-voltar" data-ir-para="tela-objetivo">← Voltar</button>
+    </section>
+
+
+    <!-- ================================================================
+         TELA 3: MEDIDAS
+         Altura, idade (já vem preenchida), peso e rotina de treino.
+         ================================================================ -->
+    <section class="tela escondido" id="tela-medidas">
+      <h1>Agora, suas medidas 📏</h1>
+      <p class="subtitulo">Fica tranquilo(a): é só pra eu te conhecer melhor!</p>
+
+      <div class="linha-dupla">
+        <div>
+          <label for="campo-altura">Altura (cm)</label>
+          <input type="number" id="campo-altura" min="50" max="250" inputmode="numeric" placeholder="170">
+        </div>
+        <div>
+          <label for="campo-idade-medidas">Idade</label>
+          <input type="number" id="campo-idade-medidas" min="1" max="120" inputmode="numeric">
+        </div>
+      </div>
+
+      <label for="campo-peso">Peso (kg)</label>
+      <input type="number" id="campo-peso" min="10" max="400" step="0.1" inputmode="decimal" placeholder="70">
+
+      <!-- O "value" de cada opção é o multiplicador usado no cálculo de calorias -->
+      <label for="campo-atividade">Como está a sua rotina de treino?</label>
+      <select id="campo-atividade">
+         <option value="1.2">Parado(a) (quase sem treino)</option>
+         <option value="1.375">Leve (1 a 3 dias/semana)</option>
+         <option value="1.55">Moderado (3 a 5 dias/semana)</option>
+         <option value="1.725">Intenso (6 a 7 dias/semana)</option>
+       </select>
+
+      <p class="mensagem-erro" id="erro-medidas" role="alert"></p>
+      <button class="botao" id="botao-ver-resultado">Ver meu resultado 🔥</button>
+      <button class="botao-voltar" data-ir-para="tela-dados">← Voltar</button>
+    </section>
+
+
+    <!-- ================================================================
+         TELA 4: RESULTADO
+         Todos os textos e números desta tela são preenchidos pelo
+         script.js (função mostrarResultado).
+         ================================================================ -->
+    <section class="tela escondido" id="tela-resultado">
+
+      <!-- 4.1 DESTAQUE: percentual de gordura corporal (resultado principal) -->
+      <div class="destaque">
+        <p class="saudacao" id="texto-saudacao"></p>
+
+        <div class="medidor">
+          <svg viewBox="0 0 120 120">
+            <circle class="medidor-fundo" cx="60" cy="60" r="52"/>
+            <circle class="medidor-anel" id="anel-gordura" cx="60" cy="60" r="52"/>
+          </svg>
+          <div class="medidor-texto">
+            <strong id="valor-gordura"></strong>
+            <small>gordura corporal</small>
+          </div>
+        </div>
+
+        <span class="etiqueta" id="etiqueta-classificacao"></span>
+        <p class="texto-faixa" id="texto-faixa"></p>
+        <p class="texto-mensagem-gordura" id="texto-mensagem-gordura"></p>
+      </div>
+
+      <!-- 4.2 OBJETIVO ESCOLHIDO -->
+      <div class="caixa-objetivo">
+        <small>🎯 Seu objetivo</small>
+        <strong id="objetivo-escolhido"></strong>
+      </div>
+
+      <!-- 4.3 CARTÕES SECUNDÁRIOS (IMC, peso ideal, calorias, etc.)
+           Os cartões são criados pelo script.js. Os 2 primeiros são os
+           mais importantes para o objetivo e ficam destacados. -->
+      <h2 class="titulo-secao">Seus números 📊</h2>
+      <p class="dica-cartoes" id="texto-dica-cartoes"></p>
+      <div class="grade-cartoes" id="grade-cartoes"></div>
+
+      <!-- 4.4 DICAS DO PERSONAL (3 frases curtas, conforme o objetivo) -->
+      <h2 class="titulo-secao">Primeiros passos pra você 🚀</h2>
+      <div class="caixa-dicas">
+        <ul id="lista-dicas"></ul>
+      </div>
+
+      <!-- 4.5 CONTATO: o botão mais importante da página -->
+      <div class="chamada-contato">
+        <strong>Me mande seus resultados!🤝</strong>
+        <span>Me chama no WhatsApp e eu monto um treino e um plano só seus!</span>
+        <button class="botao botao-whatsapp" id="botao-whatsapp">Chamar no WhatsApp 💬</button>
+      </div>
+
+      <p class="aviso" id="texto-aviso"></p>
+      <button class="botao-voltar" data-ir-para="tela-medidas">← Voltar</button>
+    </section>
+
+  </main>
+
+  <!-- ================================================================
+       RODAPÉ: ícones de Instagram e WhatsApp. Os links são colocados
+       pelo script.js (veja CONFIG: linkInstagram e numeroWhatsapp).
+       ================================================================ -->
+  <footer class="rodape">
+    <p>Me siga e fale comigo:</p>
+    <div class="icones-sociais">
+
+      <a class="icone-social" id="link-instagram" target="_blank" rel="noopener" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="5"/>
+          <circle cx="12" cy="12" r="4"/>
+          <circle cx="17.5" cy="6.5" r="1" fill="currentColor"/>
+        </svg>
+      </a>
+
+      <a class="icone-social" id="link-whatsapp" target="_blank" rel="noopener" aria-label="WhatsApp">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 3a9 9 0 0 0-7.7 13.6L3 21l4.5-1.2A9 9 0 1 0 12 3z"/>
+          <path d="M9 8.5c0 3.5 3 6.5 6.5 6.5l1-1.5-2-1-1 .8c-1-.4-2-1.4-2.4-2.4l.8-1-1-2z"/>
+        </svg>
+      </a>
+
+    </div>
+  </footer>
+
+</div>
+
+<!-- A lógica do site (cálculos, telas, botões) fica neste arquivo -->
+<script src="script.js"></script>
+</body>
+</html>
